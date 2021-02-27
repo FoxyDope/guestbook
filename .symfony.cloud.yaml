@@ -1,6 +1,6 @@
 name: app
 
-type: php:7.4
+type: php:8.0
 
 runtime:
     extensions:
@@ -9,6 +9,7 @@ runtime:
         - sodium
         - ctype
         - iconv
+        - pdo_pgsql
         
 
 #variables:
@@ -32,6 +33,9 @@ web:
 
 mounts:
     "/var": { source: local, source_path: var }
+
+relationships:
+    database: "db:postgresql"
 
 hooks:
     build: |
