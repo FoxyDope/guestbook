@@ -9,6 +9,7 @@ runtime:
         - ctype
         - iconv
         - pdo_pgsql
+        - redis
         
 
 #variables:
@@ -35,6 +36,7 @@ mounts:
 
 relationships:
     database: "db:postgresql"
+    redis: "rediscache:redis"
 
 hooks:
     build: |
