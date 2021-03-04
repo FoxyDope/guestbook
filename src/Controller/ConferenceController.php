@@ -2,27 +2,38 @@
 
 namespace App\Controller;
 
+use App\Entity\Conference;
+use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ConferenceRepository;
 
 class ConferenceController extends AbstractController
 {
-    #[Route('/{name}', name: 'homepage')]
-    public function index(string $name = ''): Response
-    {
-        if ($name) {
-            echo sprintf('<h1>Hello %s!', htmlspecialchars($name));
-        }
+    private Environment $twig;
 
-        return new Response(<<<EOF
-        <html>
-            <body>
-                <img src="/images/vladik.png" />
-            </body>
-        </html>
-        EOF
-        );
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    #[Route('/', name: 'homepage')]
+    public function index(ConferenceRepository $conferenceRepository): Response
+    {
+        return new Response($this->twig->render('conference/index.html.twig', [
+            'conferences' => $conferenceRepository->findAll(),
+        ]));
+    }
+
+    #[Route('/conference/{id}', name: 'conference')]
+    public function show(Conference $conference, CommentRepository $commentRepository): Response
+    {
+        return new Response($this->twig->render('conference/show.html.twig', [
+           'conference' => $conference,
+           'comments' => $commentRepository->findBy(['conference' => $conference], ['createdAt' => 'DESC']),
+        ]));
     }
 }
+
