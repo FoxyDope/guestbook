@@ -28,10 +28,9 @@ web:
             expires: 1h
             passthru: "/index.php"
 
-
-
 mounts:
     "/var": { source: local, source_path: var }
+    "/public/uploads": { source: local, source_path: uploads }
 
 relationships:
     database: "db:postgresql"
