@@ -1,0 +1,20 @@
+name: JFROG XRAY analysis
+
+on: [pull_request]
+
+jobs:
+  psalm:
+    name: Xray
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the container image
+        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+
+      - name: Xray
+        uses: jfrog/setup-jfrog-cli@v1
+        run: |
+          jfrog --version/
+          jfrog rt bs localbuild/testimage:latest
