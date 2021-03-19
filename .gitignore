@@ -10,3 +10,4 @@
 ###< symfony/framework-bundle ###
 /public/uploads
 /config/secrets/*/*decrypt*
+/bin/.phpunit/

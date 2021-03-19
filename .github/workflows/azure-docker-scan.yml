@@ -1,0 +1,17 @@
+name: AZURE IMAGE SCAN
+
+on: pull_request
+
+jobs:
+  build:
+    name: Azure Image Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the container image
+        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
+
+      - uses: azure/container-scan@v0
+        with:
+          image-name: localbuild/testimage:latest
+          severity-threshold: critical

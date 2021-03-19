@@ -1,0 +1,17 @@
+name: PHPCS check
+
+on: pull_request
+
+jobs:
+  phpcs:
+    name: PHPCS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer require "squizlabs/php_codesniffer=*" "pheromone/phpcs-security-audit" "dealerdirect/phpcodesniffer-composer-installer"
+
+      - name: PHPCS check
+        run: ./vendor/bin/phpcs --extensions=php,inc,lib,module,info --standard=./vendor/pheromone/phpcs-security-audit/example_base_ruleset.xml src/
